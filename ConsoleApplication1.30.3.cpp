@@ -70,8 +70,9 @@ public:
 	int getInitialTask() {
 		return initialTask;
 	}
-
+private:
 	BasicWorkers** worker = nullptr;
+public:
 	BasicWorkers* getWorker(int index) {
 		if (index < 0 || index >= quantityWorkers) {
 			return nullptr;
@@ -99,7 +100,7 @@ public:
 						if (completion == start) {
 							break;
 						}
-					} while (completion > t);
+					} while (completion);
 					cout << "\nОтделу дополнительно поставлено " << getQuantityWorkers()-getOrders() << " задач";
 					setOrders(getOrders() + getQuantityWorkers() - getOrders());
 				}
@@ -114,6 +115,9 @@ public:
 					worker[i]->setNumberTask(getInitialTask() + countTask);
 					countTask++;
 		}
+		for (int j = 0; j < getQuantityWorkers(); j++) {
+				delete worker[j];
+			}
 	}
 };
 
@@ -142,15 +146,16 @@ public:
 	int getDirectives() {
 		return directives;
 	}
-
+private:
 	MiddleLink** manager = nullptr;
+public:
 	MiddleLink* getManager(int index) {
 		if (index < 0 || index >= quantityDivisions) {
 			return nullptr;
 		}
 		return manager[index];
 	}
-	Directorate( int inDirectives, int inOrder, int inquantityDivisions, string  indirectorName, int inquantityWorkers, string inworkerName, int innumberTask, int ininitialTask) :  directives(inDirectives), quantityDivisions(inquantityDivisions), directorName(directorName) {
+	Directorate( int inDirectives, int inOrder, int inquantityDivisions, string  indirectorName, int inquantityWorkers, string inworkerName, int innumberTask, int ininitialTask) :  directives(inDirectives), quantityDivisions(inquantityDivisions), directorName(indirectorName) {
 		assert(quantityDivisions >= 0);
 		cout << "\nУкажите имя директора: ";
 		cin >> indirectorName;
@@ -179,6 +184,9 @@ public:
 				manager[i]->setOrders(inOrder);
 				manager[i]->setQuantityWorkers(inquantityWorkers);
 		}
+		for (int i = 0; i < getQuantityDivisions(); ++i) {
+				delete  manager[i];
+			}
 	}
 };
 
@@ -189,12 +197,6 @@ int main()
 	int directive=0, orders=0, quantityDivision=0,  quantityWorker=0,  numberTask=0, initialTask=0;
 	string directorName = "", workerName = "";
 	Directorate* directorate = new Directorate(directive, orders, quantityDivision,  directorName, quantityWorker, workerName, numberTask, initialTask);
-	for (int i = 0; i < directorate->getQuantityDivisions(); ++i) {
-		for (int j = 0; j < directorate->manager[i]->getQuantityWorkers();j++) {
-			delete  directorate->manager[i]->worker[j];
-		}
-		delete  directorate->manager[i];
-	}
 	delete  directorate;
 }
 
