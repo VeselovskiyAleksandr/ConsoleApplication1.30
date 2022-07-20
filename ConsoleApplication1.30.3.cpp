@@ -8,9 +8,6 @@
 #include <cassert>
 using namespace std;
 
-class Directorate;
-class MiddleLink;
-
 class BasicWorkers {
 	string workerName = "";
 	int numberTask=0;
@@ -100,7 +97,7 @@ public:
 						if (completion == start) {
 							break;
 						}
-					} while (completion);
+					} while (true);
 					cout << "\nОтделу дополнительно поставлено " << getQuantityWorkers()-getOrders() << " задач";
 					setOrders(getOrders() + getQuantityWorkers() - getOrders());
 				}
@@ -156,13 +153,6 @@ public:
 		return manager[index];
 	}
 	Directorate( int inDirectives, int inOrder, int inquantityDivisions, string  indirectorName, int inquantityWorkers, string inworkerName, int innumberTask, int ininitialTask) :  directives(inDirectives), quantityDivisions(inquantityDivisions), directorName(indirectorName) {
-		assert(quantityDivisions >= 0);
-		cout << "\nУкажите имя директора: ";
-		cin >> indirectorName;
-        cout << "\nВведите указания главы компании: ";
-        cin >> inDirectives;
-		cout << "\nУкажите количество подразделений в компании: ";
-		cin >> inquantityDivisions;
 		setQuantityDivisions(inquantityDivisions);
 		manager = new MiddleLink*[inquantityDivisions];
 		for (int i = 0; i < inquantityDivisions; ++i) {
@@ -177,6 +167,7 @@ public:
 			cin >> mN;
 				cout << "\nУкажите количество рабочих в отделе: ";
 				cin >> inquantityWorkers;
+				assert(inquantityWorkers > 0);
 			inOrder = rand() % (inDirectives + i);
 			    manager[i] = new MiddleLink( inOrder, inquantityWorkers, inworkerName, innumberTask, ininitialTask);
 				manager[i]->setInitialTask(ininitialTask);
@@ -196,7 +187,16 @@ int main()
 	srand(time(nullptr));
 	int directive=0, orders=0, quantityDivision=0,  quantityWorker=0,  numberTask=0, initialTask=0;
 	string directorName = "", workerName = "";
+	cout << "\nУкажите имя директора: ";
+	cin >> directorName;
+	cout << "\nВведите указания главы компании: ";
+	cin >> directive;
+	assert(directive > 0);
+	cout << "\nУкажите количество подразделений в компании: ";
+	cin >> quantityDivision;
+	assert(quantityDivision > 0);
 	Directorate* directorate = new Directorate(directive, orders, quantityDivision,  directorName, quantityWorker, workerName, numberTask, initialTask);
+	cout << "\nВсе рабочие заняты выполнением производственных задач.";
 	delete  directorate;
 }
 
